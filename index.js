@@ -81,8 +81,20 @@ app.post('/ussd', (req, res) => {
         } else if (['1*1*1', '1*2*1', '1*3*1', '2*1*1', '2*2*1', '2*3*1'].includes(text)) {
             userVotes[phoneNumber].voted = true;
             const candidateID = text.split('*')[1];
-            const sql = INSERT INTO votes (phoneNumber, candidateID, candidateName) VALUES (?, ?, ?);
-            pool.query(sql, [phoneNumber, candidateID,candidateName], (err, results) => {
+            let candidateName = '';
+            switch(candidateID) {
+                case '1':
+                    candidateName = 'PAUL KAGAME';
+                    break;
+                case '2':
+                    candidateName = 'FRANK HABINEZA';
+                    break;
+                case '3':
+                    candidateName = 'BARAFINDA';
+                    break;
+            }
+            const sql = 'INSERT INTO votes (phoneNumber, candidateID, candidateName) VALUES (?, ?, ?)';
+            pool.query(sql, [phoneNumber, candidateID, candidateName], (err, results) => {
                 if (err) {
                     console.error('Error inserting vote:', err);
                     response = 'END There was an error processing your vote. Please try again later.';
@@ -100,7 +112,7 @@ app.post('/ussd', (req, res) => {
                 'END MWABAYE MWANZE GUTORA. MURAKOZE!' : 
                 'END You have canceled your vote. Thank you!';
         } else if (text.toLowerCase() === 'check') {
-            const sql = SELECT candidateID FROM votes WHERE phoneNumber = ?;
+            const sql = 'SELECT candidateID FROM votes WHERE phoneNumber = ?';
             pool.query(sql, [phoneNumber], (err, results) => {
                 if (err) {
                     console.error('Error checking vote:', err);
@@ -120,7 +132,7 @@ app.post('/ussd', (req, res) => {
                             candidateName = 'BARAFINDA';
                             break;
                     }
-                    response = END You have voted for ${candidateName}.;
+                    response = `END You have voted for ${candidateName}.`;
                 }
                 res.set('Content-Type', 'text/plain');
                 res.send(response);
@@ -138,4 +150,4 @@ app.post('/ussd', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(Server listening on port ${PORT}));
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
