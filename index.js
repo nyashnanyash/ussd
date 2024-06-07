@@ -7,10 +7,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // Create a pool of database connections
 const pool = mysql.createPool({
-    host: 'bwa6d7e2a3gkzlygyehq-mysql.services.clever-cloud.com',
-    user: 'uz7dfdvrxb5qp6rn',
-    password: 'FzvRXutfw9t9hQGY2uN8',
-    database: 'bwa6d7e2a3gkzlygyehq',
+    host: 'bxejia2anbusgyh8pwrb-mysql.services.clever-cloud.com',
+    user: 'ukpa0gskslhl5nnk',
+    password: 'BsnIEVCm9xCl9tVg0t9g',
+    database: 'bxejia2anbusgyh8pwrb',
     connectionLimit: 10
 });
 
